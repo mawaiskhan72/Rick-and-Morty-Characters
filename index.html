@@ -1,106 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dynamic Cards</title>
-    <!-- Include the Tailwind CSS CDN for development (Remove in production) -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  </head>
-  <body class="bg-[#f6f8fa]">
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Rick and Morty</title>
+      <!-- Include the Tailwind CSS CDN for development (Remove in production) -->
+      <link
+        href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+        rel="stylesheet"
+      />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body class=" bg-gray-700">
 
-    <div class="flex justify-center gap-2 pt-10 pb-6">
-      <button class="bg-blue-500 text-white px-4 py-2 rounded-full">Back</button>
-      <button class="bg-gray-500 text-white px-4 py-2 rounded-full">All</button>
-      <button class="bg-red-800 hover:bg-red-600 text-white px-4 py-2 rounded-full">Dead</button>
-      <button class="bg-green-800 hover:bg-green-600 text-white px-4 py-2 rounded-full">Alive</button>
-      <button class="bg-yellow-800 hover:bg-yellow-700 text-white px-4 py-2 rounded-full">Unknown</button>
-    </div>
-
-
-    <div class="flex justify-center pb-8">
-      <div class="relative flex items-center h-10 rounded-lg focus-within:shadow-lg">
-        <div class="grid place-items-center h-full w-12 text-gray-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer rounded-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+      <header class="header bg-blue-900 h-20 flex justify-between fixed w-full z-50">
+        <p id="headertxt" class="text-white font-black text-4xl pt-3 pl-4 transition-transform transform hover:scale-105">Rick and Morty</p>
+        <div id="startparent" class="pt-4 pr-5">
+            <button id="letstart" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="openModal()">Get Started!</button>
         </div>
-        <input
-        class="peer h-full w-full outline-none text-sm text-gray-700 pl-2"
-        type="text"
-        id="search"
-        placeholder="Search branch name"
-      />      
+    </header>
+
+    <div id="myModal" class="hidden fixed z-10 inset-0 overflow-y-auto">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+            <!-- Modal panel -->
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg font-medium text-gray-900" id="modal-title">
+                                Hello, World!
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                  Welcome to Risk and Morty Task <br>
+                                  Rick and Morty is an American adult animated science fiction sitcom created by Justin Roiland and Dan Harmon for Cartoon Network's nighttime programming
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <div class="flex justify-center gap-2 pt-28 pb-6">
+        <button id="AllButton" class="bg-gray-500 text-white px-4 py-2 rounded-full">All</button>
+        <button id="DeadButton" class="bg-red-800 hover:bg-red-600 text-white px-4 py-2 rounded-full">Dead</button>
+        <button id="AliveButton" class="bg-green-800 hover:bg-green-600 text-white px-4 py-2 rounded-full">Alive</button>
+        <button id="UnknownButton" class="bg-yellow-800 hover:bg-yellow-700 text-white px-4 py-2 rounded-full">Unknown</button>
       </div>
-    </div>
-
-    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 place-items-center" id="cardContainer">
-      <!-- Cards will be dynamically generated here -->
-    </div>
     
-  
+  <div class="flex justify-center pb-8">
+        <div class="relative flex items-center h-10 rounded-lg focus-within:shadow-lg">
+          <div class="grid place-items-center h-full w-12 text-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 cursor-pointer rounded-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input
+          class="peer h-full w-full outline-none text-sm text-gray-700 pl-2"
+          type="text"
+          id="searchbar"
+          placeholder="Search card name"
+        />      
+        </div>
+      </div>
 
-    <div class="flex justify-center py-10">
-      <nav aria-label="Page navigation example">
-        <ul class="inline-flex -space-x-px text-base h-10">
-          <li>
-            <a
-              href="#"
-              class="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >Previous</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >1</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >2</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              aria-current="page"
-              class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-              >3</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >4</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >5</a
-            >
-          </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >Next</a
-            >
-          </li>
+      <div class="hover:scale-[1.1] grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6 place-items-center" id="cardContainer">
+        <!-- Cards will be dynamically generated here -->
+      </div>
+
+      <div class="pagination flex justify-center pt-10 pb-6">
+        <ul class="flex flex-row">
+          <li id="link1" value="1" onclick="activeLink(1)" class="cursor-pointer pt-2 px-4 h-10 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">1</li>
+          <li id="link2" value="2" onclick="activeLink(2)" class="cursor-pointer pt-2 px-4 h-10 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">2</li>
+          <li id="link3" value="3" onclick="activeLink(3)" class="cursor-pointer pt-2 px-4 h-10 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">3</li>
+          <li id="link4" value="4" onclick="activeLink(4)" class="cursor-pointer pt-2 px-4 h-10 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">4</li>
+          <li id="link5" value="5" onclick="activeLink(5)" class="cursor-pointer pt-2 px-4 h-10 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100">5</li>
         </ul>
-      </nav>
-    </div>
+      </div>
 
-    <script src="index.js"></script>
-  </body>
-</html>
+      <script src="script.js"></script>
+    </body>
+  </html>

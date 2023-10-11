@@ -577,9 +577,10 @@ const characters = [
     status: "unknown",
     species: "Human",
     gender: "Female",
-    imageSrc: "./Images/img74.webp",
+    imageSrc: "./Images/img60.webp",
   },
 ];
+
 
 // Function to create a card element
 function createCard(character) {
@@ -653,43 +654,180 @@ function createCard(character) {
   return card;
 }
 
+
 const cardContainer = document.getElementById("cardContainer");
 
 characters.forEach((character) => {
   const card = createCard(character);
   cardContainer.appendChild(card);
+}); 
+
+
+// Add event listener to the search input field
+const searchbar = document.getElementById("searchbar");
+searchbar.addEventListener("input", () => {
+  searchCards(searchbar.value);
 });
 
-
- function filterAndDisplayCards(searchText) {
+// Function to search and display cards based on the search query
+function searchCards(query) {
   const cardContainer = document.getElementById("cardContainer");
   cardContainer.innerHTML = "";
 
-  // Loop through the characters and display matching ones
   characters.forEach((character) => {
-    if (character.name.toLowerCase().includes(searchText.toLowerCase())) {
+    const characterGender = character.gender.toLowerCase();
+    if (
+      query === "" ||
+      character.name.toLowerCase().includes(query.toLowerCase()) ||
+      character.species.toLowerCase().includes(query.toLowerCase()) ||
+      characterGender.includes(query.toLowerCase()) ||
+      (query.toLowerCase() === "gender:male" && characterGender === "male")
+      || (query.toLowerCase() === "gender:female" && characterGender === "female")
+      || (query.toLowerCase() === "gender:unknown" && characterGender === "unknown")
+      || (query.toLowerCase() === "status:alive" && character.status.toLowerCase() === "alive")
+      || (query.toLowerCase() === "status:dead" && character.status.toLowerCase() === "dead")
+      || (query.toLowerCase() === "status:unknown" && character.status.toLowerCase() === "unknown")
+    ) {
       const card = createCard(character);
       cardContainer.appendChild(card);
     }
   });
 }
 
-const searchInput = document.getElementById("search");
-
-searchInput.addEventListener("input", () => {
-  const searchText = searchInput.value.trim();
-  filterAndDisplayCards(searchText);
-});
-
-filterAndDisplayCards("");
+// Initialize with all cards displayed
+searchCards("");
 
 
-  // Function to filter and display cards based on status
-  function filterAndDisplayCardsByStatus(status) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Add a variable to define how many cards should be displayed per page
+const cardsPerPage = 15;
+
+// Function to filter and display cards based on status and page
+function filterAndDisplayCardsByStatus(status, page) {
   const cardContainer = document.getElementById("cardContainer");
   cardContainer.innerHTML = ""; // Clear the current cards
 
-  // Loop through the characters and display matching ones
+  // Calculate the starting and ending indexes for the current page
+  const startIndex = (page - 1) * cardsPerPage;
+  const endIndex = startIndex + cardsPerPage;
+
+  // Loop through the characters and display matching ones within the specified range
+  for (let i = startIndex; i < endIndex && i < characters.length; i++) {
+    const character = characters[i];
+    if (status === "All" || character.status.toLowerCase() === status.toLowerCase()) {
+      const card = createCard(character);
+      cardContainer.appendChild(card);
+    }
+  }
+}
+
+// Add a function to update the active link
+function activeLink(page) {
+  // Remove the 'active' class from all links
+  for (let i = 1; i <= 5; i++) {
+    const link = document.getElementById(`link${i}`);
+    link.classList.remove("active");
+  }
+
+  // Add the 'active' class to the clicked link
+  const link = document.getElementById(`link${page}`);
+  link.classList.add("active");
+
+  // Filter and display cards for the selected page
+  filterAndDisplayCardsByStatus("All", page);
+}
+
+// Initialize the first page as active
+activeLink(1);
+
+
+// Function to create a card element
+function createCard(character) {
+  const card = document.createElement("div");
+  card.className =
+    "w-[300px] shadow-2xl border border-gray-300 rounded-lg bg-white";
+
+  const imageLink = document.createElement("a");
+  imageLink.href = character.imageSrc;
+  imageLink.target = "_blank";
+
+  const image = document.createElement("img");
+  image.src = character.imageSrc;
+
+  imageLink.appendChild(image);
+  card.appendChild(imageLink);
+
+  const cardContent = document.createElement("div");
+  cardContent.className = "p-5";
+
+  const name = document.createElement("p");
+  name.className = "font-bold pt-2 pb-2";
+  name.textContent = `Name: ${character.name}`;
+
+  const statusContainer = document.createElement("div");
+  statusContainer.className = "flex gap-3 pb-3";
+
+  const statusLabel = document.createElement("p");
+  statusLabel.className = "text-md font-semibold";
+  statusLabel.textContent = "Status";
+
+  const statusDot = document.createElement("p");
+  statusDot.className =
+    "flex items-center justify-center h-4 w-4 rounded-full mt-1 " +
+    (character.status === "dead" ? "bg-red-600" : character.status === "unknown" ? "bg-purple-600" : "bg-green-600");
+
+  const statusText = document.createElement("p");
+  statusText.className = "text-[#16a34a]";
+  statusText.textContent = character.status;
+
+  statusContainer.appendChild(statusLabel);
+  statusContainer.appendChild(statusDot);
+  statusContainer.appendChild(statusText);
+
+  const infoContainer = document.createElement("div");
+  infoContainer.className = "gap-2 flex flex-col";
+
+  const speciesBtn = document.createElement("button");
+  speciesBtn.className = "text-white text-md w-64";
+  speciesBtn.textContent = `Species: ${character.species}`;
+
+  const genderBtn = document.createElement("button");
+  genderBtn.className = "text-white text-md w-64 ";
+  genderBtn.textContent = `Gender: ${character.gender}`;
+
+  speciesBtn.style.backgroundColor = "#16a34a";
+  genderBtn.style.backgroundColor = "#16a34a";
+
+  infoContainer.appendChild(speciesBtn);
+  infoContainer.appendChild(genderBtn);
+
+  cardContent.appendChild(name);
+  cardContent.appendChild(statusContainer);
+  cardContent.appendChild(infoContainer);
+
+  card.appendChild(cardContent);
+
+  return card;
+}
+
+// Function to filter and display cards based on status
+function filterAndDisplayCards(status) {
+  const cardContainer = document.getElementById("cardContainer");
+  cardContainer.innerHTML = "";
+
   characters.forEach((character) => {
     if (status === "All" || character.status.toLowerCase() === status.toLowerCase()) {
       const card = createCard(character);
@@ -698,34 +836,35 @@ filterAndDisplayCards("");
   });
 }
 
-// Get the button elements
-const backBtn = document.querySelector(".bg-blue-500");
-const allBtn = document.querySelector(".bg-gray-500");
-const deadBtn = document.querySelector(".bg-red-800");
-const aliveBtn = document.querySelector(".bg-green-800");
-const unknownBtn = document.querySelector(".bg-yellow-800");
+// Add event listeners to the buttons
 
-// Add click event listeners to the buttons
-backBtn.addEventListener("click", () => {
-  // Simply refresh the page to go back to the initial state
-  location.reload();
+document.getElementById("AllButton").addEventListener("click", () => {
+  filterAndDisplayCards("All");
 });
 
-allBtn.addEventListener("click", () => {
-  filterAndDisplayCardsByStatus("All");
+document.getElementById("DeadButton").addEventListener("click", () => {
+  filterAndDisplayCards("dead");
 });
 
-deadBtn.addEventListener("click", () => {
-  filterAndDisplayCardsByStatus("dead");
+document.getElementById("AliveButton").addEventListener("click", () => {
+  filterAndDisplayCards("alive");
 });
 
-aliveBtn.addEventListener("click", () => {
-  filterAndDisplayCardsByStatus("alive");
+document.getElementById("UnknownButton").addEventListener("click", () => {
+  filterAndDisplayCards("unknown");
 });
 
-unknownBtn.addEventListener("click", () => {
-  filterAndDisplayCardsByStatus("unknown");
-});
+// Initialize with "All" cards displayed
+filterAndDisplayCards("All");
 
-// Initial display of all cards
-filterAndDisplayCardsByStatus("All");
+
+
+
+
+function openModal() {
+  document.getElementById('myModal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('myModal').classList.add('hidden');
+}
